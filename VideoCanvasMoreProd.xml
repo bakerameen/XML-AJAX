@@ -1,0 +1,3742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="API Demo" scrolling="true">
+		<Require feature="opensocial-templates" />
+		<Require feature="opensocial-data" />
+		<Require feature="views" />
+		<Require feature="dynamic-height" />
+	</ModulePrefs>
+	<Content type="html" view="homecanvas">
+		<![CDATA[
+		<script xmlns:os="http://ns.opensocial.org/2008/markup" type="text/os-data">
+		/* here we can use data passed from the gadget to make an API call before the microapp is rendered. You must replace "your.sabacloud.com" with your site url. */
+		
+		<os:HttpRequest key="profile_data" href="https://mishkatysb.sabacloud.com/Saba/api/component/people/${ViewParams.sabaContext.userId}:(socialProfile,coreProfile,lname,fname,username,email,is_manager,person_no,customValues)?SabaCertificate=${ViewParams.sabaContext.certificate}"/>
+		
+		</script>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://eu2t1.sabacloud.com/production/EU2TNB0225/sabacr117540099777064354/content.css" />
+		<style type="text/css">
+		/* you could put a stylesheet in here too or link one in */
+		/* you can also link in javascript as you would a regular web page rather than coding it inline */
+		.behCompet .card .card-body .card-text {
+    font-size: 20px;
+    font-weight: 700;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #333333;
+}
+
+        .b-tab {  
+  display: none;
+}
+
+.b-tab.active {
+  display: block;
+}
+
+.b-nav-tab {
+  display: inline-block;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.b-nav-tab.active {
+  color: #ff4200;
+}
+
+.categorisTab {
+    min-height: 431px;
+}
+
+.claendarLoader { 
+    min-height: 400px;
+}
+
+.activStream {
+    height: 1500px;    
+	margin-bottom:50px
+}
+
+.commentParentinput {
+border-radius: 25px;
+    width: 30%;
+    background-color: #efeded;
+    border-color: gray !important;
+    padding: 5px 5px;
+}
+
+.button.commentParentbutton {
+     border-radius: 10px;
+    padding: 5px 5px;
+}
+
+.user-conver-border {
+    border-bottom: 5px #ebebeb solid;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+		</style>
+
+		<script src="https://eu2t1.sabacloud.com/production/EU2TNB0225/sabacr11018306322516912665/content.js"></script>
+		
+		<script type="text/javascript">
+		function init(){
+		var profileData = opensocial.data.DataContext.getDataSet('profile_data'), // these 3 lines bring in the variables from above containing the API data
+		viewData = gadgets.views.getParams(), //this brings in the ViewParams data passed from Saba
+		div1 = document.getElementById("1");
+		div2 = document.getElementById("2");
+		
+    const urll = "https://mishkatysb-api.sabacloud.com";
+    const InProgressLearning = document.getElementById("InProgressLearning");
+    const InPrpgressLearningBadge = document.getElementById("InPrpgressLearningBadge");
+	    const RecommendedLearningBadge = document.getElementById("RecommendedLearningBadge");
+    const MandatoryLearning = document.getElementById("MandatoryLearning");
+    const MandatoryLearningBadge = document.getElementById("MandatoryLearningBadge");
+	const LinkedIn = document.getElementById("LinkedIn");
+	const CompletedLearning = document.getElementById("CompletedLearning");
+	const CompletedLearningBadge = document.getElementById("CompletedLearningBadge");
+	const BehavioralCompetenciesId = document.getElementById("BehavioralCompetenciesId");
+	const LearningHoursId = document.getElementById("LearningHoursId");
+	const AllCategorise = document.getElementById("AllCategorise");
+	const WebBased =  document.getElementById("WebBased");
+	const InstructorLed = document.getElementById("InstructorLed");
+	const BlendedId = document.getElementById("BlendedId");
+	const VirtualClassroomId = document.getElementById("VirtualClassroomId");
+	    const RecommendedLearning = document.getElementById("RecommendedLearning");
+	const conversationId = document.getElementById("conversationId");
+	const usercommentId = document.getElementById("usercommentId");
+	const reactions = document.getElementById("reactions");
+	// const baqee  = document.getElementById("baqee");
+	const lodergifid = document.getElementById("lodergif");
+
+
+	
+	let durationItemsLoop = 0;
+	let durationItemsLoopParse = '';
+	
+
+	
+
+	events = [{ }];
+
+		
+		
+		
+		//did we get any gadget view data?
+		if (viewData){
+		// console.log('viewData', viewData);
+		var viewDataString = gadgets.json.stringify(viewData),
+		sabaCerticate = viewData.sabaContext.apiCertificate,
+		userName = viewData.sabaContext.userName,
+		userId = viewData.sabaContext.userId;
+		
+		//console.log("userId 2024", userId);
+		
+		} else {
+		console.log("error loading gadget view data");
+		}
+		
+		//did we get any saba api data?
+		if (profileData){
+		// console.log('profileData', profileData);
+		var apiDataString = gadgets.json.stringify(profileData),
+		firstName = profileData.content.fname,
+		lastName = profileData.content.lname;
+		bday = profileData.content.username;
+		userInternalid = profileData.content.id;
+		var divstuff = "Welcome to Your Website "+ sabaCerticate;
+		var happybday = "Your username is : "+ bday;
+		// div1.innerHTML = divstuff;
+		// div2.innerHTML = happybday;
+		
+		gadgets.window.adjustHeight()
+		
+		} else {
+		console.log("error loading profile api data");
+		div1.innerHTML = "error loading profile api data";
+		}
+		
+
+		const GetContent = (ffff) => {
+		//	console.log('ffff', ffff);
+		}
+
+	 
+	 
+		
+	
+
+         const getMainSlider = () => {
+
+	 var swiper = new Swiper(".mySwiper", {
+    // cssMode: true,
+    // updateOnWindowResize: false,
+    slidesPerView: 1,
+    spaceBetween: 0,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    // mousewheel: true,
+    // keyboard: true,
+  });
+		 }
+		 
+		 
+		 
+// dislike function
+		 
+		 
+		 
+		 const  disLike = (itemId, sabaCerticate) => {
+		 
+		 const Certicate = sabaCerticate;	
+	
+
+        let url=""+urll+"/v1/social/resource/"+itemId+"/likes?SabaCertificate="+Certicate;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("DELETE", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const dislikesDocument  = JSON.parse(this.responseText);
+	
+           //console.log('dislikesDocument', dislikesDocument); 
+
+          // addLike(itemId, sabaCerticate);
+		  
+		  let dislikeDiv  = document.getElementById(itemId);
+		 // dislikeDiv.classList.remove("likeclass");
+		 dislikeDiv.className = "";
+		 dislikeDiv.classList.add("like");
+            let likeDiv = ''; 
+			likeDiv.innerHTML = '';
+			likeDiv.innerHTML = totalLikes;
+
+
+
+         getTotalLikesAfterClick(itemId, sabaCerticate, likeDiv);
+		
+		}};
+		
+		
+		xhr.send();
+		 
+		 }
+		 
+		 
+		 
+		 
+		 // add like function 
+		 
+		const  addLike = (itemId, sabaCerticate, totalLikes) => {
+		 
+		 const Certicate = sabaCerticate;
+	
+
+let url=""+urll+"/v1/social/resource/"+itemId+"/likes?thumbsDown=:thumbsDown&SabaCertificate="+Certicate;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const likesDocument  = JSON.parse(this.responseText);
+	
+          // console.log('likesDocument', likesDocument); 
+
+         
+		 
+  		  let likeDiv  = document.getElementById(itemId);
+		 
+		 likeDiv.className = "";
+		 likeDiv.classList.add("dislike");
+
+		 
+		 getTotalLikesAfterClick(itemId, sabaCerticate, likeDiv);
+		
+		}};
+		
+		
+		xhr.send();
+		 
+		 }
+		 
+		 
+		 
+		 
+		 
+		 // getTotalLikesAfterClick
+		 
+		 
+		 const getTotalLikesAfterClick = (itemId, Certicate, likeDiv) => {
+		 
+		 	    
+  
+	const url = ""+urll+"/v1/social/resource/"+itemId+"/likes?summary=false&SabaCertificate="+Certicate;
+	
+	 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityLikesCount  = JSON.parse(this.responseText);
+
+			 
+			 	 
+			 
+			 
+			 let NumtotalLikes = '';
+			 const totalLikes = ActivityLikesCount.totalLikes;
+			  const EmployeeIdArray = ActivityLikesCount.likeDetails;
+			  
+			  
+			
+			// console.log('ActivityLikesCount', ActivityLikesCount);
+			
+			
+			likeDiv.innerHTML = '';
+			likeDiv.innerHTML = totalLikes;
+
+
+
+
+
+			
+			
+		     
+					
+    
+		
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+		 
+		 }
+
+  		// getCourseDetailes function
+		
+		const getCourseDetailes = (sabaCerticate, offeringTemplateId, HTMLid) => {
+		let html_content = '';
+	
+	
+		const Certicate = sabaCerticate;
+		const offeringTemplate_Id = offeringTemplateId;
+
+		
+		
+	
+
+		let url = ""+urll+"/v1/course/"+offeringTemplate_Id+"?SabaCertificate="+Certicate;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const CourseDocument  = JSON.parse(this.responseText);
+	
+	     //console.log('CourseDocument test login', CourseDocument);
+	
+		let courseTitle = "";
+		let courseLink = "";
+		let courseImage = "";
+		
+		courseTitle = CourseDocument.title;
+		courseLink = CourseDocument.deepLinkUrls[0];
+		courseImage = CourseDocument.image;
+		
+
+		
+		var stringToHTML = function (str) {var dom = document.createElement('div'); dom.classList.add("col-xl-2","col-lg-3","col-md-4","mb-3"); dom.innerHTML = str;return dom;};
+		
+	
+ 
+
+		html_content += `
+		<div class="card">
+		<img class="card-img-top" src="${courseImage}" alt="Card"> 
+		 <div class="card-body"> 
+		 <a class="card-text" href="${courseLink}" target='_blank'>${courseTitle}</a> 
+		 </div> 
+		 `; 
+
+		
+         HTMLid.append(stringToHTML(html_content));	  
+		
+		}};
+		
+		
+		xhr.send();
+		
+		}
+		
+		
+		// Learning Hours Completed
+
+		const LearningHoursCompleted = (sabaCerticate, registrationID) => {
+
+let html_content = '';
+
+
+		
+
+			const Certicate = sabaCerticate;
+			const registration_ID = registrationID;
+
+
+			let url = ""+urll+"/v1/enrollments/"+registration_ID+"/sections:classdetail?SabaCertificate="+Certicate;
+			
+			let xhr = new XMLHttpRequest();
+			xhr.open("GET", url);
+			
+			xhr.setRequestHeader("Accept", "application/json");
+			xhr.setRequestHeader("Content-Type", "application/json");
+			
+			xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+			LearningHoursId.innerHTML = '';	
+			const HoursCompletedDoc  = JSON.parse(this.responseText);			
+
+			
+			let durationMap = HoursCompletedDoc;
+			
+	
+			
+			
+			 durationItemsLoop += parseInt(durationMap.classDetail.duration);
+
+             
+			      
+			     let hours   = parseFloat(durationItemsLoop / 60); // get hours
+				 //let minutes = Math.floor((durationItemsLoop - (hours * 3600)) / 60); // get minutes
+                // let seconds = durationItemsLoop - (hours * 3600) - (minutes * 60); //  get seconds
+    
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+		
+
+		var stringToHTML = function (str) {var dom = document.createElement('span');  dom.innerHTML = str;return dom;};
+		
+
+
+		html_content += `		
+		${hours} Hours 
+		`;
+
+		
+        LearningHoursId.append(stringToHTML(html_content));	  
+
+	
+
+
+			
+			}};
+			
+			
+			xhr.send();
+
+		}
+		
+		// get Completed
+
+		const getCompleted = (sabaCerticate, bday, InProgressLearning) => {		
+			const Certicate = sabaCerticate;
+			const userID = bday;
+	 		
+			let url = ""+urll+"/v1/transcripts/searchQuery?count=5&startPage=1&includeDetails=TRUE&SabaCertificate="+Certicate;
+			
+			let xhr = new XMLHttpRequest();
+			xhr.open("POST", url);
+			
+			xhr.setRequestHeader("Accept", "application/json");
+			xhr.setRequestHeader("Content-Type", "application/json");
+			
+			xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+			const completedDoc  = JSON.parse(this.responseText);			
+			
+			//console.log('completedDoc', completedDoc);
+
+			const totalResults = completedDoc.totalResults;			
+			CompletedLearningBadge.innerText = totalResults;
+			
+			const results = completedDoc.results;
+			//console.log('completedDoc results', results);
+			let itemId = "";
+			
+			for(var i in results){
+
+			
+			
+			if (results[i].registration !== null & results[i].registration !== '') {
+				registrationID = results[i].registration.id;
+				
+			LearningHoursCompleted(sabaCerticate, registrationID);		
+			 }	
+			
+			}
+			
+			for(var i in results){
+			if (i < 5) {
+			itemId = results[i].offering_temp_id.id;		
+			 getCourseDetailes(sabaCerticate, itemId, CompletedLearning);
+			}
+			}
+
+
+			
+			}};
+			
+			const body = JSON.stringify({"conditions": [{"name": "oaStatus","operator": "==","value": "200"},{"name": "learner_username","operator": "==","value": userID},{"name": "archived","operator": "!=","value": "1"}]});      			
+			xhr.send(body);
+			
+			}
+
+
+		
+		// getInProgressLearning function
+		
+		const getInProgressLearning = (sabaCerticate, bday, InProgressLearning) => {		
+		const Certicate = sabaCerticate;
+		const userID = bday;
+	
+		// let url = ""+urll+"/v1/learning/enroll/search?q=(reg_status==100,action_status==100,student_username=="+userID+")&count=40&startPage=1&includeDetails=true&SabaCertificate="+Certicate;
+		
+let url = ""+urll+"/v1/enrollment?includeDetails=true&SabaCertificate="+Certicate;
+		
+		
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const xmlDoc  = JSON.parse(this.responseText);
+		
+		
+		const dataLength = xmlDoc.results.length;
+		
+		const results = xmlDoc.results;
+		
+		//console.log('mostafa 2030', xmlDoc);
+
+         InPrpgressLearningBadge.innerText = dataLength;
+		// InPrpgressLearningBadge.append(dataLength);
+
+
+		let itemId = "";
+		for(var i in results){
+		if (i < 5) {
+		itemId = xmlDoc.results[i].offering_temp_id.id;
+	
+		getCourseDetailes(sabaCerticate, itemId, InProgressLearning);
+		}
+		}
+		
+		
+		}};
+		
+		
+		xhr.send();
+		
+		}
+		
+
+	
+          // get Competency
+
+	const getCompetency  = (sabaCerticate, RecommendedLearning) => {
+		let html_content = '';
+		
+	    
+	
+		const Certicate = sabaCerticate;
+	
+       
+
+		 const url = ""+urll+"/v1/performance/competencies?type=all&q=(assignee=="+userInternalid+")&count=10&startPage=1&includeDetails=true&SabaCertificate="+Certicate;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const CompetencyDocument  = JSON.parse(this.responseText);
+		
+			const responseResults  = CompetencyDocument.results;
+			
+		const competencyLength = responseResults.length;
+        RecommendedLearningBadge.innerText = competencyLength;
+
+		$.each(responseResults, function (key, item) {
+		
+		//console.log('responseResults', responseResults);
+		 if (key < 5) {  
+		   let itemGap = item.gap;
+		   
+		   
+		   let itemrequiredLevelTitle = item.competencyDetail.name;
+           let requiredLevel = 	item.requiredLevel.name;	   
+		
+		   
+		   let itemHeldLevel = item.heldLevel;
+		   
+		      if (itemHeldLevel !== null) {
+		   
+		   itemHeldLevel = item.requiredLevel.value; 
+		   
+		   } else {
+		   
+		    itemHeldLevel = "0"; 
+		   }
+		   
+		   var stringToHTML = function (str) {var dom = document.createElement('div'); dom.classList.add("col-xl-2","col-lg-3","col-md-4","mb-5"); dom.innerHTML = str;return dom;};
+		
+        html_content = '';
+        
+		html_content += `              
+                <div class="card">
+				   <div style="font-size: 20px;
+    font-weight: 700;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #333333; height: 100px; padding-left:5px">
+                   ${itemrequiredLevelTitle}
+				   </div>
+                  <div class="card-body">
+				  <span style="font-weight:bold; font-size: 14px;">Required Level:</span> ${requiredLevel} <br />				  
+				  <span style="font-weight:bold; font-size: 14px;">Current Level:</span> ${itemHeldLevel}<br />
+                   <span style="font-weight:bold; font-size: 14px;">gap: </span> ${itemGap} 
+                    
+                  </div>
+                </div>
+             `;
+			 
+			 RecommendedLearning.append(stringToHTML(html_content));
+		 
+		 
+		 }
+		
+		
+
+		        });
+				
+				  
+		
+		}};
+		 
+		
+		xhr.send();
+
+	  }
+
+		
+		// getMandatory function
+
+    const getMandatory = (sabaCerticate, MandatoryLearning) => {
+	
+	
+	//console.log('getMandatory');
+
+      	const Certicate = sabaCerticate; 
+      
+    const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+    
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+		const CourseDocument  = JSON.parse(this.responseText);
+		 
+
+		const dataLength = CourseDocument.results.length;
+        MandatoryLearningBadge.innerText = dataLength;
+     
+		const results = CourseDocument.results;
+		
+		let itemId = "";
+		for(var i in results){		
+		itemId = CourseDocument.results[i].id;
+		
+		 getCourseDetailes(sabaCerticate, itemId, MandatoryLearning);
+
+    }
+		
+		
+		}};
+		
+		const body = JSON.stringify({"searchContext": "LEARNINGEVENT", "learningEventType": "COURSE", "category": [{"id": "categ000000000003223", "name": "Compliance Courses"}]});      
+		xhr.send(body);
+
+
+    }
+	
+	   // Calendar Start
+
+	   const drowCalendar = () => {
+		
+
+        // calendar
+
+        let nav = 0;
+        let clicked = null;
+
+
+        const calendar = document.getElementById('calendar');
+        const newEventModal = document.getElementById('newEventModal');
+        const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        function CourseInfo(eventForDays) {
+            let html_content = '';
+
+            html_content.innerHTML = '';
+			
+            $.each(eventForDays, function (key, item) {
+
+                
+                let title = item.title;
+                let stDate = item.startDate;
+                let enDate = item.endDate;
+                let stTime = item.startTime;
+                let enTime = item.endTime;
+
+                html_content += `<div class="eventList">
+                <div class="row">
+                  <div class="col-3 pr-0">
+                    <div class="time">${stTime}</div>
+                    <div class="timeSmall">${enTime}</div>
+                  </div>
+                  <div class="col-9">
+                    <div class="eventSub">${title}</div>
+                  </div>
+                </div>
+              </div>`;
+
+            });
+
+
+            $('#ClassSessions').empty();
+            $('#ClassSessions').append(html_content);
+
+        }
+
+
+
+        function getCourseInfo(date, eventForDay, displaySessionDate) {
+            $('#clendarContainer').show();
+            clicked = date;
+
+            const eventForDays = eventForDay;
+            const sesseionDay = displaySessionDate;
+            $('#startsessionDate').empty();
+            $('#startsessionDate').append(sesseionDay);
+            // const eventsForDay = events.find(e => e.startDate === clicked);
+            CourseInfo(eventForDays);
+
+        }
+
+
+
+        const load = () => {
+            // events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
+
+
+ 
+
+            const dt = new Date();
+            if (nav !== 0) {
+                dt.setMonth(new Date().getMonth() + nav);
+            }
+
+            const day = dt.getDate();
+            const month = dt.getMonth();
+            const year = dt.getFullYear();
+
+            // get current date 
+            const dd = String(dt.getDate()).padStart(2, '0');
+            const mm = String(dt.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const yyyy = dt.getFullYear();
+
+            let todayy = mm + '-' + dd + '-' + yyyy;
+
+            
+
+
+
+            let longMonth = dt.toLocaleString('en-us', { month: 'long' }); /* June */
+
+
+
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            });
+
+            // get last Day
+            const lastDayOfMonth = new Date(year, month + 1, 0);
+            const lastDayString = lastDayOfMonth.toLocaleDateString('en-us', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            });
+
+            lastDay = lastDayString.split("/")[1];
+
+            const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
+            document.getElementById('monthDisplay').innerText =
+                `${dt.toLocaleDateString('en-us', { month: 'long' })} ${year}`;
+
+            calendar.innerHTML = '';
+
+            // pass parameeter to getCalendar Function
+            const firstDayCalendar = "01";
+            let monthCalendar = month;
+            monthCalendar = monthCalendar + 1;
+            if (monthCalendar.toString().length == 1) {
+                monthCalendar = "0" + monthCalendar;
+            } else {
+                monthCalendar = monthCalendar;
+            }
+            let yearCalendar = year;
+            let lastDayCalendar = lastDay;
+
+            let Firstdate = '';
+            let Enddate = '';
+
+            Firstdate = `${yearCalendar}-${monthCalendar}-${firstDayCalendar}`;
+            Enddate = `${yearCalendar}-${monthCalendar}-${lastDayCalendar}`;
+
+
+
+
+       getCalendar(Firstdate, Enddate, sabaCerticate);
+
+
+
+
+            $('#startsessionDate').empty();
+            $('#clendarContainer').hide();
+            
+
+            for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+
+
+                const daySquare = document.createElement('div');
+                daySquare.classList.add('day');
+
+
+                let displaySessionDate = `${i - paddingDays} ${longMonth} ${yearCalendar}`;
+                const dayString = `${month + 1}-${i - paddingDays}-${year}`;
+
+
+                if (i > paddingDays) {
+
+					
+
+                    daySquare.innerText = i - paddingDays;
+					lodergifid.style.display = "block";
+					$('#calendar').hide();
+
+                    setTimeout(function () {                 
+                       $('#calendar').show();
+					   lodergifid.style.display = "none";
+					   
+
+                        // dd current date
+                        // todayy
+                        //Code
+                        let sessonsForDay = events.filter(session => session.startDate === dayString);                       
+                        const eventForDay = events.find(e => e.startDate === dayString);
+
+                       if (eventForDay) {
+                            daySquare.classList.add('activeCurrentDay');
+                          const eventDiv = document.createElement('div');
+                            eventDiv.classList.add('event');
+                            daySquare.appendChild(eventDiv);
+                            daySquare.addEventListener('click', () => getCourseInfo(dayString, sessonsForDay, displaySessionDate));
+                        }
+						
+  
+                        // if ( day === day) {
+							
+                           //  let xxxx = '4-5-2022';
+                          //   let currentSessonsDay = events.filter(session => session.startDate === xxxx);
+                         //    console.log('currentSessonsDay', currentSessonsDay);
+                         //    getCourseInfo(dayString, currentSessonsDay, '05 April 2022')
+   
+                        //    }
+
+
+                    }, 5000); //time in milliseconds
+
+
+
+
+                } else {
+                   // console.log('There is No event', events.length);
+                    daySquare.classList.add('padding');
+                }
+
+                calendar.appendChild(daySquare);
+            }
+
+
+
+             // CourseInfo();
+
+        }
+
+        function initButtons() {
+            document.getElementById('nextButton').addEventListener('click', () => {
+                nav++;
+                load();
+            });
+
+            document.getElementById('backButton').addEventListener('click', () => {
+                nav--;
+                load();
+            });
+
+
+        }
+
+
+        initButtons();
+        load();
+
+
+    };
+
+    const getCalendar = (Fdate, Edate, sabaCerticate) => {  
+		
+		const Certicate = sabaCerticate;
+        const startDate = Fdate;
+        const endDate = Edate;
+        
+
+        const url = ""+urll+"/v1/offering?type=instructor_led&q=(start_date=gt="+startDate+",end_date=le="+endDate+")&count=10&startPage=1&SabaCertificate="+Certicate;
+
+
+
+
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+		xhr.onreadystatechange = function () {			
+				  if (xhr.readyState === 4) {	
+					const calendarDocument  = JSON.parse(this.responseText);
+					
+					//console.log('calendarDocument', calendarDocument);
+					
+				//	const ids = calendarDocument[1].map(el => el.elementId);
+					
+				//const filteredIds = ids.filter((item, index) => ids.indexOf(item) === index);
+					
+                 CalendarArray = calendarDocument.results;
+				
+				CalendarArray.forEach(function (calendarItem, index) {
+				
+				   calendarItemId = calendarItem.id;		  
+				  
+				
+						getClassDetailes(calendarItemId, Certicate);
+					//	console.log('%cduration', 'color: green; background: yellow; font-size: 30px'); 
+			
+					});
+
+				//	console.log('loop Finish');
+
+			 }};
+			  
+			 
+			 
+			 xhr.send();
+				  
+        
+    }
+
+	// classDetailes
+
+	const getClassDetailes = (calendarItemId, sabaCerticate) => { 
+
+		const elementID = calendarItemId;
+		const Certicate = sabaCerticate;
+
+		const url = ""+urll+"/v1/offering/"+elementID+"?SabaCertificate="+Certicate;
+
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+		xhr.onreadystatechange = function () {			
+				  if (xhr.readyState === 4) {	
+					const classDetailes  = JSON.parse(this.responseText);					
+					let className = classDetailes.name;	
+					getSeesions(elementID, className, Certicate);	
+					//console.log('getClassDetailes');
+				}};			  
+				//console.log('getClassDetailes finsi');	 
+			 xhr.send();				  
+
+	}
+    
+
+	 // get Seesions
+
+	 const getSeesions = (elementId, className, sabaCerticate) => { 
+		const Certicate = sabaCerticate;
+		let html_co = '';
+        let html_content = '';
+		const elementID = elementId;
+        const classNameTitle = className;
+
+	
+
+		const url = ""+urll+"/v1/offering/"+ elementID +"/session?SabaCertificate="+Certicate;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+		xhr.onreadystatechange = function () {			
+				  if (xhr.readyState === 4) {	
+					const SeesionsDetailes  = JSON.parse(this.responseText);					
+					
+					
+					SeesionsDetailes.sessionsInLocationTimezone[1].forEach(function (sessionItem, index) {
+						
+						let sessionName = sessionItem.sessionName
+						let startDateEpoch = sessionItem.startDateEpoch[1];
+						let endDateEpoch = sessionItem.endDateEpoch[1];
+						let startTime = sessionItem.startTime;
+						let endTime = sessionItem.endTime;
+
+						// convert unix dates
+						let startDateEpochConverted = new Date(startDateEpoch);
+						let endDateEpochConverted = new Date(endDateEpoch);
+
+						const startDateEpochString = startDateEpochConverted.toLocaleDateString('en-us', {
+							year: 'numeric',
+							month: 'numeric',
+							day: 'numeric',
+						});
+						const endDateEpochString = endDateEpochConverted.toLocaleDateString('en-us', {
+							year: 'numeric',
+							month: 'numeric',
+							day: 'numeric',
+						});
+	
+						let startDateEpochStringReplaced = startDateEpochString.replaceAll("/", "-");
+						let endDateEpochStringReplaced = endDateEpochString.replaceAll("/", "-");
+
+						events.push({
+							title: classNameTitle,
+							startDate: startDateEpochStringReplaced,
+							endDate: endDateEpochStringReplaced,
+							startTime: startTime,
+							endTime: endTime
+						});					
+	
+                       
+						
+					});
+					//console.log('getSeesions');
+				}};			  
+			 	
+				//console.log('getSeesions finsih');
+			 xhr.send();				  
+
+	 }
+
+	   // Calendar End
+
+
+
+	   // getMandatory function
+
+    const getLinkedInLearning = (sabaCerticate) => {
+      	const Certicate = sabaCerticate; 
+      
+    const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+    
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+		const LinkedInDocument  = JSON.parse(this.responseText);
+		
+		 const results = LinkedInDocument.results;
+	
+		 let itemId = "";
+		 let linkedInDsescription = "";
+
+		 for(var i in results){		
+		 itemId = LinkedInDocument.results[i].id;
+		 itemdescription = LinkedInDocument.results[i].description;
+		
+
+		 getlinkedInDetailesSplited(itemId, itemdescription, sabaCerticate, LinkedIn);
+ 
+	 }
+		
+		
+		}};
+		
+		
+		const body = JSON.stringify({"searchContext": "LEARNINGEVENT", "learningEventType": "COURSE", "category": [{"id": "categ000000000003360", "name": "LinkedIn Learning"}],"tag": [ "Communication"], "sortBy": "RecentlyAdded"});      
+		xhr.send(body);
+
+
+    }
+
+
+	  // getlinkedInDetailes 
+
+	  const getlinkedInDetailes = (linkedInID, linkedInDsescription, sabaCerticate, HTML_Id) => {
+		let html_content = '';
+	    HTML_Id.innerHTML = '';
+	
+		const Certicate = sabaCerticate;
+		const offeringTemplate_Id = linkedInID;
+
+
+		
+
+        // linkedIn_Dsescription
+        let linkedIn_Dsescription = linkedInDsescription;	
+        // const linkedIn_Dsescription_splited = linkedIn_Dsescription.split(":")[1].split('\n')[0];
+	
+
+		let url = ""+urll+"/v1/course/"+offeringTemplate_Id+"?SabaCertificate="+Certicate;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const CourseDocument  = JSON.parse(this.responseText);
+		
+	
+
+		//let lkedIn_Dsescription = linkedIn_Dsescription;
+		let courseTitle = "";
+		let courseLink = "";
+		let courseImage = "";
+		//let lkedIn_Dsescription_string = "";
+
+		courseTitle = CourseDocument.title;
+		courseLink = CourseDocument.deepLinkUrls[0];
+		courseImage = CourseDocument.image;
+
+
+		//switch (lkedIn_Dsescription) {
+		//	case 'INTERMEDIATE':
+			//	lkedIn_Dsescription_string = '<span class="intrIcon">' + lkedIn_Dsescription + '</span>';
+			//	break;
+		//	case 'BEGINNER':
+			//	lkedIn_Dsescription_string = '<span class="intrIcon">' + lkedIn_Dsescription + '</span>';
+			//	break;
+		//	case 'ADVANCED':
+			//	lkedIn_Dsescription_string = '<span class="intrIcon">' + lkedIn_Dsescription + '</span>';
+	//	}
+		
+
+		
+		var stringToHTML = function (str) {var dom = document.createElement('div'); dom.classList.add("col-xl-2","col-lg-3","col-md-4","mb-5"); dom.innerHTML = str;return dom;};
+		
+        html_content = '';
+        
+		html_content += `              
+                <div class="card">
+                  <img class="card-img-top" src="${courseImage}" alt="Card">
+                  <div class="card-body">                   
+                    <a class="card-text" href="${courseLink}" target='_blank'>${courseTitle}</a>
+                  </div>
+                </div>
+             `;
+
+		     
+			 HTML_Id.append(stringToHTML(html_content));	  
+		
+		}};
+		
+		
+		xhr.send();
+
+	  }
+
+
+	  // getlinkedIn Detailes  Splitted
+
+	  const getlinkedInDetailesSplited = (linkedInID, linkedInDsescription, sabaCerticate, HTML_Id) => {
+		let html_content = '';
+	    HTML_Id.innerHTML = '';
+	
+		const Certicate = sabaCerticate;
+		const offeringTemplate_Id = linkedInID;
+
+
+		
+
+        // linkedIn_Dsescription
+        let linkedIn_Dsescription = linkedInDsescription;	
+        const linkedIn_Dsescription_splited = linkedIn_Dsescription.split(":")[1].split('\n')[0];
+	
+
+		let url = ""+urll+"/v1/course/"+offeringTemplate_Id+"?SabaCertificate="+Certicate;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+		const CourseDocument  = JSON.parse(this.responseText);
+		
+		
+
+		let lkedIn_Dsescription = linkedIn_Dsescription_splited;
+		let courseTitle = "";
+		let courseLink = "";
+		let courseImage = "";
+		let lkedIn_Dsescription_string = "";
+
+		courseTitle = CourseDocument.title;
+		courseLink = CourseDocument.deepLinkUrls[0];
+		courseImage = CourseDocument.image;
+
+
+		switch (lkedIn_Dsescription) {
+			case 'INTERMEDIATE':
+				lkedIn_Dsescription_string = '<span class="iconIntermediate">' + lkedIn_Dsescription + '</span>';
+				break;
+			case 'BEGINNER':
+				lkedIn_Dsescription_string = '<span class="iconBeginner">' + lkedIn_Dsescription + '</span>';
+				break;
+			case 'ADVANCED':
+				lkedIn_Dsescription_string = '<span class="iconExpert">' + lkedIn_Dsescription + '</span>';
+			break;
+            default:
+            // code block
+            lkedIn_Dsescription_string = '<span class="iconNon">' + lkedIn_Dsescription + '</span>';			
+		}
+		
+
+		
+		var stringToHTML = function (str) {var dom = document.createElement('div'); dom.classList.add("col-xl-2","col-lg-3","col-md-4","mb-5"); dom.innerHTML = str;return dom;};
+		
+        html_content = '';
+        
+		html_content += `              
+                <div class="card">
+                  <img class="card-img-top" src="${courseImage}" alt="Card">
+                  <div class="card-body">
+                   ${lkedIn_Dsescription_string}
+                    <a class="card-text" href="${courseLink}" target='_blank'>${courseTitle}</a>
+                  </div>
+                </div>
+             `;
+
+		     
+			 HTML_Id.append(stringToHTML(html_content));	  
+		
+		}};
+		
+		
+		xhr.send();
+
+	  }
+	   
+	   // getLinkedInLearning end
+
+
+	   // get competencies start
+
+	   const getBehavioralCompetenciesComponent = () => {
+
+
+		document.getElementById("Competencies").onchange = function() {configureDropDownLists(this,document.getElementById('Levels'))};
+		document.getElementById("Levels").onchange = function() {LevelFunction()};
+   
+		 const CompetenciesArray = [
+		   {
+			 competency: "Ensure Accountability",
+			 levels: [
+			   {
+				 level: "level 1",
+				 id: "categ000000000003880",
+				 name: "LEVEL 1",
+			   },
+			   {
+				 level: "level 2",
+				 id: "categ000000000003881",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003882",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003883",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Collaborates",
+			 levels: [
+			   {
+				 level: "level 1",
+				 id: "categ000000000003864",
+				 name: "LEVEL 1",
+			   },
+			   {
+				 level: "level 2",
+				 id: "categ000000000003865",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003866",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003867",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Drives Results",
+			 levels: [
+			   {
+				 level: "level 1",
+				 id: "categ000000000003884",
+				 name: "LEVEL 1",
+			   },
+			   {
+				 level: "level 2",
+				 id: "categ000000000003885",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003886",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003887",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Embraces Innovation",
+			 levels: [
+			   {
+				 level: "level 1",
+				 id: "categ000000000003888",
+				 name: "LEVEL 1",
+			   },
+			   {
+				 level: "level 2",
+				 id: "categ000000000003889",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003890",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003891",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Champions Agility",
+			 levels: [
+			   {
+				 level: "level 1",
+				 id: "categ000000000003853",
+				 name: "LEVEL 1",
+			   },
+			   {
+				 level: "level 2",
+				 id: "categ000000000003861",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003862",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003863",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Demonstrates Integrity and Respect",
+			 levels: [
+			   {
+				 level: "level 1",
+				 id: "categ000000000003905",
+				 name: "LEVEL 1",
+			   },
+			   {
+				 level: "level 2",
+				 id: "categ000000000003906",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003907",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003908",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Develops Talent",
+			 levels: [
+			   {
+				 level: "level 2",
+				 id: "categ000000000003892",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003893",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4",
+				 id: "categ000000000003894",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Builds Effective Teams",
+			 levels: [
+			   {
+				 level: "level 2",
+				 id: "categ000000000003895",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003896",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4 ",
+				 id: "categ000000000003897",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		   {
+			 competency: "Drives Vision & Purpose",
+			 levels: [
+			   {
+				 level: "level 2",
+				 id: "categ000000000003898",
+				 name: "LEVEL 2",
+			   },
+			   {
+				 level: "level 3",
+				 id: "categ000000000003899",
+				 name: "LEVEL 3",
+			   },
+			   {
+				 level: "level 4 ",
+				 id: "categ000000000003900",
+				 name: "LEVEL 4",
+			   },
+			 ],
+		   },
+		 ];
+   
+		 // getBehavioralCompetencies
+
+	
+
+		 const getBehavioralCompetencies = (levelOption, uid , sabaCerticateCer) => {
+
+		   const Certicate = sabaCerticateCer; 
+      
+    const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+    
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+			const LinkedInDocument  = JSON.parse(this.responseText);
+			
+		
+			const results = LinkedInDocument.results;
+	   
+			let itemId = "";
+			let linkedInDsescription = "";
+   
+			for(var i in results){		
+			itemId = LinkedInDocument.results[i].id;
+			itemdescription = LinkedInDocument.results[i].description;
+		   
+   
+			getlinkedInDetailes(itemId, itemdescription, sabaCerticate, BehavioralCompetenciesId);
+
+			}
+
+		 
+		}};
+		
+		const body = JSON.stringify({"searchContext": "LEARNINGEVENT",  "learningEventType": "COURSE",  "category": [{"id": uid,  "name": levelOption}]});      
+		xhr.send(body);
+
+
+		   
+		 };
+   
+   
+		 // onlOad dropdowns data
+		// getBehavioralCompetencies("LEVEL 1", "categ000000000011900", sabaCerticate);
+		 // createOption(ddl, text, value, id);
+   
+   
+   
+		 // create competncies dropdown
+		 for (i = 0; i < CompetenciesArray.length; i++) {
+		   let competencyName = CompetenciesArray[i].competency;
+		   competencyID = document.getElementById("Competencies");
+		   createOption(
+			 competencyID,
+			 competencyName,
+			 competencyName,
+			 competencyName
+		   );
+		 }
+   
+		 //  create levels
+		 function configureDropDownLists(Competencies, ddl2) {
+   
+		   
+   
+		   // get levels options
+		   let levelsLoop1 = CompetenciesArray[0].levels;
+		   let levelsLoop2 = CompetenciesArray[1].levels;
+		   let levelsLoop3 = CompetenciesArray[2].levels;
+		   let levelsLoop4 = CompetenciesArray[3].levels;
+		   let levelsLoop5 = CompetenciesArray[4].levels;
+		   let levelsLoop6 = CompetenciesArray[5].levels;
+		   let levelsLoop7 = CompetenciesArray[6].levels;
+		   let levelsLoop8 = CompetenciesArray[7].levels;
+		   let levelsLoop9 = CompetenciesArray[8].levels;
+   
+		   // get competncies values positions
+		   let getFirstComptencyPosition = CompetenciesArray[0].competency;
+		   let getSecondComptencyPosition = CompetenciesArray[1].competency;
+		   let getThiredComptencyPosition = CompetenciesArray[2].competency;
+		   let getFourthComptencyPosition = CompetenciesArray[3].competency;
+		   let getFifthComptencyPosition = CompetenciesArray[4].competency;
+		   let getSexthComptencyPosition = CompetenciesArray[5].competency;
+		   let getSeventhComptencyPosition = CompetenciesArray[6].competency;
+		   let getEightComptencyPosition = CompetenciesArray[7].competency;
+		   let getNinthComptencyPosition = CompetenciesArray[8].competency;
+   
+		   // get competency value
+		   CompetenciesValue = Competencies.value;
+   
+		   switch (CompetenciesValue) {
+			 case getFirstComptencyPosition:
+			   Levels.options.length = 0;
+              getBehavioralCompetencies(CompetenciesArray[0].levels[0].level, CompetenciesArray[0].levels[0].id, sabaCerticate);
+			
+			   for (i = 0; i < levelsLoop1.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop1[i].name,
+				   levelsLoop1[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getSecondComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[1].levels[0].level, CompetenciesArray[1].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop2.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop2[i].name,
+				   levelsLoop2[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getThiredComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[2].levels[0].level, CompetenciesArray[2].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop3.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop3[i].name,
+				   levelsLoop2[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getFourthComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[3].levels[0].level, CompetenciesArray[3].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop4.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop4[i].name,
+				   levelsLoop4[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getFifthComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[4].levels[0].level, CompetenciesArray[4].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop5.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop5[i].name,
+				   levelsLoop5[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getSexthComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[5].levels[0].level, CompetenciesArray[5].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop6.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop6[i].name,
+				   levelsLoop6[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getSeventhComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[6].levels[0].level, CompetenciesArray[6].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop7.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop7[i].name,
+				   levelsLoop7[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getEightComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[7].levels[0].level, CompetenciesArray[7].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop8.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop8[i].name,
+				   levelsLoop8[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 case getNinthComptencyPosition:
+			   Levels.options.length = 0;
+			   getBehavioralCompetencies(CompetenciesArray[8].levels[0].level, CompetenciesArray[8].levels[0].id, sabaCerticate);
+			   for (i = 0; i < levelsLoop9.length; i++) {
+				 createOption(
+				   ddl2,
+				   levelsLoop9[i].name,
+				   levelsLoop9[i].name,
+				   levelsLoop1[i].id
+				 );
+			   }
+			   break;
+			 default:
+			   Levels.options.length = 0;
+			   break;
+		   }
+		 }
+   
+		 function createOption(ddl, text, value, id) {
+   
+
+   
+		   var opt = document.createElement("option");
+		   opt.value = value;
+		   opt.text = text;
+		   opt.dataset.uid = id;
+		   ddl.options.add(opt);
+		 }
+   
+		 function LevelFunction() {
+		   let levelOption = document.getElementById("Levels").value;
+		   let levelOption2 = document.getElementById("Levels");
+		   var uid =
+			 levelOption2.options[levelOption2.selectedIndex].getAttribute(
+			   "data-uid"
+			 );
+   
+		
+   
+		   // call getBehavioralCompetencies
+		   getBehavioralCompetencies(levelOption, uid, sabaCerticate);
+		 }
+   
+	   }
+	   
+	   // getCatalogCategories
+	   
+	   const getCatalogCategories = (sabaCerticate) => {
+	    const Certicate = sabaCerticate; 
+      
+    const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+			const CatalogCategoriesDocument  = JSON.parse(this.responseText);
+			
+		
+			const results = CatalogCategoriesDocument.results;
+	   
+			let itemId = "";
+			let linkedInDsescription = "";
+   
+			for(var i in results){		
+			itemId = CatalogCategoriesDocument.results[i].id;
+			itemdescription = CatalogCategoriesDocument.results[i].description;
+		   
+   
+			getlinkedInDetailes(itemId, itemdescription, sabaCerticate, AllCategorise);
+
+			}
+
+		 
+		}};
+		
+		const body = JSON.stringify({"searchContext": "LEARNINGEVENT",  "learningEventType": "COURSE"});      
+		xhr.send(body);
+
+	   
+	   }
+	   
+	   // get Web Based   
+	   	   
+	   
+	   const getWebBased = (sabaCerticate) => {
+	    const Certicate = sabaCerticate; 
+      
+    const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+			const CatalogCategoriesDocument  = JSON.parse(this.responseText);
+			
+		
+			const results = CatalogCategoriesDocument.results;
+	   
+			let itemId = "";
+			let linkedInDsescription = "";
+   
+			for(var i in results){		
+			itemId = CatalogCategoriesDocument.results[i].id;
+			itemdescription = CatalogCategoriesDocument.results[i].description;
+		   
+   
+			getlinkedInDetailes(itemId, itemdescription, sabaCerticate, WebBased);
+
+			}
+
+		 
+		}};
+		
+		const body = JSON.stringify({    "searchContext": "LEARNINGEVENT",    "deliveryType": {        "id": "eqcat000000000000005",        "displayName": "Web-Based"    }});       
+		xhr.send(body);
+
+	   
+	   }
+	   
+	   // get getInstructor Led
+	   
+	   const getInstructorLed = (sabaCerticate) => {
+	   
+	   	    const Certicate = sabaCerticate; 
+      
+    const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+
+xhr.onreadystatechange = function () {
+  //console.log('CourseDocument 201');	
+		if (xhr.readyState === 4) {
+			const CatalogCategoriesDocument  = JSON.parse(this.responseText);
+			//console.log('CatalogCategoriesDocument', CatalogCategoriesDocument);
+		
+			const results = CatalogCategoriesDocument.results;
+	   
+			let itemId = "";
+			let linkedInDsescription = "";
+   
+			for(var i in results){		
+			itemId = CatalogCategoriesDocument.results[i].id;
+			itemdescription = CatalogCategoriesDocument.results[i].description;
+		   
+   
+			getlinkedInDetailes(itemId, itemdescription, sabaCerticate, InstructorLed);
+
+			}
+
+		 
+		}};
+		
+		const body = JSON.stringify({"searchContext": "LEARNINGEVENT", "deliveryType": {"id": "eqcat000000000000004","displayName": "Instructor-Led"}});       
+		xhr.send(body);
+		
+		
+	   }
+	   
+	   
+	   // get getBlended
+	   
+	   const getBlended = (sabaCerticate) => {
+	   
+	   const Certicate = sabaCerticate; 
+      
+       const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+			const CatalogCategoriesDocument  = JSON.parse(this.responseText);
+			
+		
+			const results = CatalogCategoriesDocument.results;
+	   
+			let itemId = "";
+			let linkedInDsescription = "";
+   
+			for(var i in results){		
+			itemId = CatalogCategoriesDocument.results[i].id;
+			itemdescription = CatalogCategoriesDocument.results[i].description;
+		   
+   
+			getlinkedInDetailes(itemId, itemdescription, sabaCerticate, BlendedId);
+
+			}
+
+		 
+		}};
+		
+		const body = JSON.stringify({    "searchContext": "LEARNINGEVENT",    "deliveryType": {        "id": "eqcat000000000000014",        "displayName": "blended"    }});       
+		xhr.send(body);
+	   
+	   }
+	   
+	   
+	    // get Virtual Classroom
+		
+		const getVirtualClassroom = (sabaCerticate) => {
+		
+			   const Certicate = sabaCerticate; 
+      
+       const url = ""+urll+"/v1/globalsearch?count=5&startPage=1&SabaCertificate="+Certicate;
+		 
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+		
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+
+xhr.onreadystatechange = function () {
+  
+		if (xhr.readyState === 4) {
+			const CatalogCategoriesDocument  = JSON.parse(this.responseText);
+			
+		
+			const results = CatalogCategoriesDocument.results;
+	   
+			let itemId = "";
+			let linkedInDsescription = "";
+   
+			for(var i in results){		
+			itemId = CatalogCategoriesDocument.results[i].id;
+			itemdescription = CatalogCategoriesDocument.results[i].description;
+		   
+              
+			getlinkedInDetailes(itemId, itemdescription, sabaCerticate, VirtualClassroomId);
+
+			}
+
+		 
+		}};
+		
+		const body = JSON.stringify({    "searchContext": "LEARNINGEVENT",    "deliveryType": {        "id": "eqcat000000000000008",        "displayName": "Virtual Classroom"    }});       
+		xhr.send(body);
+		
+		
+		}
+		
+
+		// getActivity Stream;
+
+		const getActivityStream = (sabaCerticate) => {
+		
+			const Certicate = sabaCerticate; 
+   
+	const url = ""+urll+"/v1/social/resource/group/groupName=Nomac Connect?q=(resourceType==discussions)&SabaCertificate="+Certicate;
+
+
+	  
+	 let xhr = new XMLHttpRequest();
+	 xhr.open("GET", url);
+	 
+	 xhr.setRequestHeader("Accept", "application/json");
+	 xhr.setRequestHeader("Content-Type", "application/json");
+
+
+xhr.onreadystatechange = function () {
+
+	 if (xhr.readyState === 4) {
+		 const ActivityStreamDocument  = JSON.parse(this.responseText);
+		 
+		 //console.log('ActivityStreamDocument', ActivityStreamDocument);
+	 
+		 const results = ActivityStreamDocument.results;
+		 
+		 
+		 const commentids = results.map(el => el.id);
+		 // const commenthref = results.map(el => el.href);
+		 
+		 
+		 const filteredIds = commentids.filter((item, index) => commentids.indexOf(item) === index);
+		 // const filteredhref = commenthref.filter((item, index) => commenthref.indexOf(item) === index);
+					
+
+
+					
+	   
+		 let itemId = "";
+		 let href = "";
+		 
+		 			filteredIds.forEach(function (commentItem, index) {
+					//console.log('commentItem', commentItem);
+					
+					itemId = commentItem;
+           href = `${urll}/v1/social/discussion/${itemId}`;
+	            //console.log('href', href);
+             
+		 getActivityDetailes(href, Certicate, itemId);
+					});
+		 
+		
+
+	  
+	 }};
+	 
+	 
+	 xhr.send();
+	 
+	 
+	 }
+
+
+     // get getActivityDetailes
+
+	 const getActivityDetailes = ( href, sabaCerticate, itemId) => {
+	 
+	    
+
+		const Certicate = sabaCerticate; 
+		const link = href;
+   
+		const url = ""+link+"?SabaCertificate="+Certicate;
+	
+	//console.log('url', url);
+		  
+		 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityDetailesDocument  = JSON.parse(this.responseText);			 
+			
+		// console.log('ActivityDetailesDocument', ActivityDetailesDocument);
+	
+            let createdBy =  '';
+			let createdId =  '';
+			let subject = '';
+			let description = '';
+
+		
+		    createdBy = ActivityDetailesDocument.auditDetail.createdBy;
+			createdId = ActivityDetailesDocument.auditDetail.createdId;
+			subject = ActivityDetailesDocument.subject;
+			description = ActivityDetailesDocument.description;
+			createdOn = ActivityDetailesDocument.auditDetail.createdOn
+		   
+			const ActivityDetailesObject = {
+				createdBy: createdBy, 
+				createdId: createdId,
+				subject: subject,
+				description: description,
+				createdOn: createdOn
+			};
+			 //  console.log('ActivityDetailesObject', createdOn);
+				getActivityUser(Certicate, ActivityDetailesObject, itemId);	   
+	
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+		 
+
+	 }
+
+	  ///////////////////////// getActivityImages
+
+	  const getActivityUser = (sabaCerticate, ActivityDetailesObject, itemId) => {
+
+        
+		
+		//console.log('ActivityDetailesObject', ActivityDetailesObject);
+
+		const Certicate = sabaCerticate; 
+		let userId = ActivityDetailesObject.createdId;
+		const ActivityDetailesObjects = ActivityDetailesObject;
+   
+		const url = ""+urll+"/v1/people/"+userId+"?SabaCertificate="+Certicate;
+	
+	//console.log('url', url);
+		  
+		 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityUserDocument  = JSON.parse(this.responseText);			 
+			//console.log('ActivityUserDocument', ActivityUserDocument);
+			
+		let userName = ActivityUserDocument.fname;
+		let userLastName = ActivityUserDocument.lname;
+
+		getActivityImage(Certicate, userName, userLastName, ActivityDetailesObjects , itemId);
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+
+	  }
+   
+	  ///////////////////////
+
+
+	  function changeText(id) {
+		id.innerHTML = "Ooops!";
+		//console.log('id', id);
+	  }
+
+	  //////////////////////
+
+
+
+
+	  
+
+	  // getActivityImage;
+
+     const getActivityImage = (sabaCerticate, userName, userLastName, ActivityDetailesObjects , itemId ) => {
+
+
+		//console.log('ActivityDetailesObjects', ActivityDetailesObjects);
+
+		
+		
+		let html_content = '';
+		const Certicate = sabaCerticate; 
+		let userId = ActivityDetailesObjects.createdId;
+		let userFname = userName;
+		let ActivityObjects = ActivityDetailesObjects;
+		let Activitysubject = ActivityObjects.subject;
+		let Activitydescription = ActivityObjects.description;
+		let ActivitycreatedOn = ActivityDetailesObjects.createdOn;
+
+
+		const url = ""+urll+"/v1/common/profile/"+userId+"/profilePicURL?SabaCertificate="+Certicate;
+	
+	//console.log('url', url);
+		  
+		 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityImageDocument  = JSON.parse(this.responseText);			 
+			
+             let displayName = ActivityImageDocument.displayName;
+             //console.log('ActivityImageDocument displayName', displayName);
+
+
+
+
+			// var stringToHTML = function (str) {var dom = document.createElement('div'); dom.classList.add("conversation2020"); dom.innerHTML = str;return dom;};
+		
+	         var commentNumbers = '';
+ 
+			// start drow likes
+			
+			
+			
+			
+
+			 const userComment = document.createElement('div');
+			 userComment.setAttribute('id', 'parentcomment' + itemId);
+			 var getIDParent = userComment.getAttribute("id");
+			 
+
+
+			 
+			 userComment.classList.add('user-conver', 'user-conver-border');
+			//userComment.setAttribute('data-id', itemId);
+			
+
+           // add comment form start
+			const formParent = document.createElement('div');
+			formParent.classList.add('commntParentcss');
+			
+			const formParentinput = document.createElement('input');
+			formParentinput.setAttribute('id', 'filedcomment' + itemId);
+			var getinputvalue = formParentinput.getAttribute("id");
+			formParentinput.classList.add('commentParentinput', 'border-0', 'p-2');
+			formParentinput.setAttribute('type', 'text');
+			formParentinput.setAttribute('value', 'default');
+			
+			
+			const formParentbutton = document.createElement('button');
+			formParentbutton.classList.add('commentParentbutton');
+			formParentbutton.textContent = 'add comment';
+			formParentbutton.addEventListener('click', () => postComment(getIDParent, getinputvalue, itemId, Certicate, userFname));
+			
+			formParent.appendChild(formParentinput);
+			formParent.appendChild(formParentbutton);
+			
+			
+			
+			// add comment form end
+
+	        //  userComment.appendChild(formParent);
+
+			
+			 const avatarDiv = document.createElement('div');
+			 avatarDiv.classList.add('avatar');
+			 const userImage = document.createElement('img');
+			 userImage.src = displayName;
+			 avatarDiv.appendChild(userImage);
+
+			userComment.appendChild(avatarDiv);
+            
+
+			 const userData = document.createElement('div');
+			 userData.classList.add('user-data');
+
+			 const userNames = document.createElement('div');
+			 userNames.classList.add('name');
+			 userNames.innerHTML = userFname ;
+
+			 const subjectspan = document.createElement('small');
+			 subjectspan.innerHTML = Activitysubject;
+			 //userNames.appendChild(subjectspan);
+
+			 userData.appendChild(userNames);
+
+			const date =   document.createElement('div');
+			date.classList.add('date');
+			date.innerHTML = ActivitycreatedOn;			
+			userData.appendChild(date);
+
+			const time =   document.createElement('div');
+			time.classList.add('time');
+			userData.appendChild(time);
+
+			const description =   document.createElement('div');
+			description.classList.add('user-txt');
+			description.innerHTML = Activitydescription;
+			userData.appendChild(description);
+
+
+			const reactions =   document.createElement('div');
+			reactions.classList.add('reactions');
+			userData.appendChild(reactions);
+			
+			const comments =   document.createElement('div');
+			comments.classList.add('comment');
+			//comments.addEventListener('click', () => getComment(getIDParent));
+			const commentcount = document.createElement('span');
+			commentcount.classList.add('commentnumber');
+			commentcount.innerHTML = '';
+			
+
+			
+			//comments.appendChild(commentcount);
+			
+			//reactions.appendChild(comments);
+			
+			const Like =   document.createElement('div');
+			Like.setAttribute('id', itemId);
+     		Like.addEventListener('click', () => clickLikesCounter(sabaCerticate, itemId));
+			const likecount = document.createElement('span');
+           
+
+
+	  getLikesCounter(sabaCerticate, itemId, userComment, userData, reactions, Like, likecount, formParent);		    
+			 
+	
+
+            
+			
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+
+	 }
+
+     //////////////////
+	 
+//	 const getComment = (getIDParent) => {
+	 
+	// const commentForm = document.getElementById('addcommentcontainer');
+	// const getIDParentId = document.getElementById(getIDParent);
+	 
+	 
+	 
+    //$(getIDParentId).append(commentForm);
+	
+//	document.getElementById('addcomment').addEventListener('click', (e) => {
+    	
+ // alert(e.target.parentElement.parentNode.id);
+ // let formparentid = e.target.parentElement.id;
+ 
+ 
+// console.log(el.closest('#div-02')); // <div id="div-02">
+	
+ 
+         //   });
+	 
+	// }
+	 
+	 // postComment(getIDParent))
+
+
+
+      const postComment  = (getIDParent, getinputvalue, itemId, sabaCerticate, userFname) => {
+
+
+let html_comment = '';
+
+let inputValue = document.getElementById(getinputvalue).value;
+let getIDParentId = document.getElementById(getIDParent);
+
+
+
+	  const Certicate = sabaCerticate;   
+  
+	const url = ""+urll+"/v1/social/resource/"+itemId+"/comment?SabaCertificate="+Certicate;
+	
+	//console.log('urlllll', url );
+	
+	 let xhr = new XMLHttpRequest();
+		 xhr.open("POST", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+		 
+		 
+			
+		
+		html_comment = `
+<div class="user-comment"><div class="avatar"></div><div class="user-data"><div class="name">${firstName} ${lastName}</div><div class="date"></div><div class="time"></div><div class="user-txt">${inputValue}</div><div class="reactions"></div></div></div>
+`;
+
+
+
+$(getIDParentId).append(html_comment);
+		  
+		 }};
+		 
+ 
+		 
+		 const body = JSON.stringify({"comment": inputValue});      			
+			xhr.send(body);
+
+	  
+	  }
+
+
+
+	  ///////////////
+
+      const getLikesCounter = (sabaCerticate, itemId, userComment, userData, reactions, Like, likecount, formParent) => {
+
+	  const Certicate = sabaCerticate;   
+  
+	const url = ""+urll+"/v1/social/resource/"+itemId+"/likes?summary=false&SabaCertificate="+Certicate;
+	
+	 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityLikesCount  = JSON.parse(this.responseText);
+			 //console.log('ActivityLikesCount', ActivityLikesCount);
+			 
+			 	 
+			 
+			 
+			 let NumtotalLikes = '';
+			 const totalLikes = ActivityLikesCount.totalLikes;
+			  const EmployeeIdArray = ActivityLikesCount.likeDetails;
+			  
+			  //console.log('EmployeeIdArray', EmployeeIdArray);
+			
+			
+			// start drow likes
+			
+			
+			
+			
+
+
+			 // check if user do like
+			 
+			 
+			 	if (EmployeeIdArray.length !== 0 ) { 
+			 
+			EmployeeIdArray.forEach(function (Employee, index) {
+
+//console.log('EmployeeIdArray Employee', Employee);			
+
+			 const EmployeeId = Employee.personDetail.id;		  
+		
+		 
+		    if (EmployeeId !== userInternalid ) {
+			
+			
+             
+			 Like.classList.add('like');
+			 likecount.classList.add('number');
+			 likecount.innerHTML = '';
+			likecount.innerHTML = totalLikes;
+			Like.appendChild(likecount);
+		 //console.log('Employee do like');
+			 
+			} else {
+            Like.classList.add('dislike');
+		  	likecount.classList.add('number');
+			likecount.innerHTML = '';
+			likecount.innerHTML = totalLikes;
+			Like.appendChild(likecount);
+		 //console.log('Employee hs no like');
+			 
+			}
+			
+			
+		 
+					});
+			 
+			} else {
+			
+			Like.classList.add('like');
+			 likecount.classList.add('number');
+			 likecount.innerHTML = '';
+			likecount.innerHTML = totalLikes;
+			Like.appendChild(likecount);
+            
+			  //console.log('There are no likes');
+			 
+		
+			}
+
+
+
+			
+			
+		     
+		   reactions.appendChild(Like);
+
+
+		 userComment.appendChild(userData);
+
+	userComment.appendChild(formParent);
+			
+			
+          getActivityComments(sabaCerticate, itemId , userComment);
+
+    
+		
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+	  
+	  }
+	  
+	  
+
+
+      ////////   
+	  
+	  
+	  
+	  	  ///////////////
+
+      const clickLikesCounter = (sabaCerticate, itemId) => {
+
+	  const Certicate = sabaCerticate;   
+  
+	const url = ""+urll+"/v1/social/resource/"+itemId+"/likes?summary=false&SabaCertificate="+Certicate;
+	
+	 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityLikesCount  = JSON.parse(this.responseText);
+			 //console.log('ActivityLikesCount', ActivityLikesCount);
+			 
+			 	 
+			 
+			 
+			 let NumtotalLikes = '';
+			 const totalLikes = ActivityLikesCount.totalLikes;
+			  const EmployeeIdArray = ActivityLikesCount.likeDetails;
+			  
+			  //console.log('EmployeeIdArray', EmployeeIdArray);
+			
+			
+			// start drow likes
+			
+			
+			
+			
+
+
+			 // check if user do like
+			 
+			 
+			 	if (EmployeeIdArray.length !== 0 ) { 
+			 
+			EmployeeIdArray.forEach(function (Employee, index) {
+
+//console.log('EmployeeIdArray Employee', Employee);			
+
+			 const EmployeeId = Employee.personDetail.id;		  
+		
+		 
+		    if (EmployeeId !== userInternalid ) {
+			
+			
+		 addLike(itemId, sabaCerticate)
+         //disLike(itemId, sabaCerticate)	 
+		 //console.log('Employee do like');
+			 
+			} else {
+			//addLike(itemId, sabaCerticate)
+            disLike(itemId, sabaCerticate)
+		 //console.log('Employee hs no like');
+			 
+			}
+			
+			
+		 
+					});
+			 
+			} else {
+			
+			addLike(itemId, sabaCerticate)
+            // disLike(itemId, sabaCerticate)
+			  //console.log('There are no likes');
+			 
+		
+			}
+
+
+
+			
+			
+		     
+					
+    
+		
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+	  
+	  }
+	  
+	  
+
+
+      ////////   
+	  
+
+
+	  ///////////////
+
+      const getLikesCounter02 = (sabaCerticate, itemID, userComment, userData, reactions, Like, likecount) => {
+
+	  const Certicate = sabaCerticate;   
+  
+	const url = ""+urll+"/v1/social/resource/"+itemID+"/likes?summary=false&SabaCertificate="+Certicate;
+	
+	 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityLikesCount  = JSON.parse(this.responseText);
+			 //console.log('ActivityLikesCount 222222', ActivityLikesCount);
+			 
+			 	 
+			 
+			 
+			 let NumtotalLikes = '';
+			 const totalLikes = ActivityLikesCount.totalLikes;
+			  const EmployeeIdArray = ActivityLikesCount.likeDetails;
+			  
+			  //console.log('EmployeeIdArray 2222222', EmployeeIdArray);
+			
+			
+			// start drow likes
+			
+			
+			
+			
+
+
+			 // check if user do like
+			 
+			 
+			 	if (EmployeeIdArray.length !== 0 ) { 
+			 
+			EmployeeIdArray.forEach(function (Employee, index) {
+
+//console.log('EmployeeIdArray Employee', Employee);			
+
+			 const EmployeeId = Employee.personDetail.id;		  
+		
+		 
+		    if (EmployeeId !== userInternalid ) {
+			
+			
+             
+			 Like.classList.add('like');
+			 likecount.classList.add('number');
+			 likecount.innerHTML = '';
+			likecount.innerHTML = totalLikes;
+			Like.appendChild(likecount);
+		 //console.log('Employee do like');
+			 
+			} else {
+            Like.classList.add('dislike');
+		  	likecount.classList.add('number');
+			likecount.innerHTML = '';
+			likecount.innerHTML = totalLikes;
+			Like.appendChild(likecount);
+		 //console.log('Employee hs no like');
+			 
+			}
+			
+			
+		 
+					});
+			 
+			} else {
+			
+			Like.classList.add('like');
+			 likecount.classList.add('number');
+			 likecount.innerHTML = '';
+			likecount.innerHTML = totalLikes;
+			Like.appendChild(likecount);
+            
+			  //console.log('There are no likes');
+			 
+		
+			}
+
+
+
+			
+			
+		     
+		   reactions.appendChild(Like);
+
+
+		 userComment.appendChild(userData);
+
+					
+			 $('#conversationId').append(userComment);
+      
+
+    
+		
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+	  
+	  }
+	  
+	  
+
+
+      ////////   
+	  
+
+
+	  const  getActivityComments  = (sabaCerticate, itemId , userComment) => {
+
+		// let html_content = '';
+		const Certicate = sabaCerticate; 	
+	
+
+ 
+	
+  
+  
+		const url = ""+urll+"/v1/social/resource/"+itemId+"/comment?SabaCertificate="+Certicate;
+	
+	//console.log('url', url);
+		  
+		 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityImageDocument  = JSON.parse(this.responseText);			 
+			 const commentDetail = ActivityImageDocument.commentDetail;
+			 const ActivityImageDocumentCount = ActivityImageDocument.count;
+      
+           console.log('commentDetail 2020', commentDetail);
+			 
+			 
+			
+  if(ActivityImageDocumentCount == 0) {
+  $('#conversationId').append(userComment);		 
+   
+			 
+	
+
+  } else {
+  
+  for(var i in commentDetail){
+				 <!-- if (i < 4) { -->
+			
+				let comment  = '';
+				let firstName  = '';
+				let lastName  = '';
+				let userId = '';
+                let itemID = '';
+
+               		
+
+				comment = commentDetail[i].comment;	
+				firstName  = commentDetail[i].personDetail.firstName;
+				lastName  = commentDetail[i].personDetail.lastName;	
+				commentNumbers = commentDetail.length;
+				userId = commentDetail[i].personDetail.id;
+				itemID = commentDetail[i].id;
+				parentId = commentDetail[i].parentId;
+				likeCount = commentDetail[i].likeCount;
+				createdOnSubComments = commentDetail[i].createdOn;
+				
+				
+				const commentObj = {			   
+			   comment: comment,
+			   firstName: firstName,
+			   lastName: lastName,
+			   commentNumbers: commentNumbers,
+               likeCount: likeCount,
+               lastName: lastName,
+               createdOnSubComments: createdOnSubComments			   
+			   }		
+
+			
+	
+	
+	       getActivityCommentsImage(Certicate, userId, commentObj, userComment, itemID, parentId);
+	
+ 
+
+
+				}
+  
+  }
+
+			 
+
+       //let commentsCount = document.querySelector(".commentnumber").innerHTML = ActivityImageDocumentCount;
+			
+			 
+
+	
+		
+				 
+		//	var stringToHTML = function (str) {var dom = document.createElement('div'); // dom.classList.add("conversation2"); dom.innerHTML = str;return dom;};
+		//	 conversationId.append(stringToHTML(html_content));	
+		
+
+			
+		  
+
+
+
+
+
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+	  };
+
+
+
+	  ///////////////////////
+
+      const getActivityCommentsImage = (sabaCerticate, userId, commentObj, userComment, itemID, parentId) => {
+
+
+
+
+		// let html_content = '';
+		const Certicate = sabaCerticate;
+       		
+		
+		
+
+		const url = ""+urll+"/v1/common/profile/"+userId+"/profilePicURL?SabaCertificate="+Certicate;
+	
+	//console.log('url', url);
+		  
+		 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityCommentsImage  = JSON.parse(this.responseText);			 
+			
+             //console.log('getActivityCommentsImage 2020', ActivityCommentsImage);
+
+			let displayName = ActivityCommentsImage.displayName;
+			 
+			 //console.log('displayName 2020', displayName);
+			 
+     
+const userCommentDiv = document.createElement('div');
+		    userCommentDiv.classList.add('user-comment');
+		 
+
+			const avatarDiv02 = document.createElement('div');
+		    avatarDiv02.classList.add('avatar');
+			 
+		    const userImage02 = document.createElement('img');
+		    userImage02.classList.add('imagecomment');
+			userImage02.src = displayName;
+		    avatarDiv02.appendChild(userImage02);
+
+		    userCommentDiv.appendChild(avatarDiv02);
+		 
+		    const userData02 = document.createElement('div');
+		    userData02.classList.add('user-data');
+
+            userCommentDiv.appendChild(userData02);
+
+		    const userNames02 = document.createElement('div');
+		    userNames02.classList.add('name');
+		    userNames02.innerHTML = commentObj.firstName + ' ' + commentObj.lastName;
+
+			const subjectspan02 = document.createElement('small');
+			subjectspan02.innerHTML = commentObj.comment;
+			//userNames02.appendChild(subjectspan02);
+
+		     userData02.appendChild(userNames02);
+
+		    const date02 =   document.createElement('div');
+			date02.classList.add('date');
+			date02.innerHTML = commentObj.createdOnSubComments;
+			userData02.appendChild(date02);
+
+			const time02 =   document.createElement('div');
+			time02.classList.add('time');
+			userData02.appendChild(time02);
+
+			const description02 =   document.createElement('div');
+			description02.classList.add('user-txt');
+			description02.innerHTML = commentObj.comment;
+			userData02.appendChild(description02);
+
+
+			const reactions02 =   document.createElement('div');
+			reactions02.classList.add('reactions');
+			userData02.appendChild(reactions02);
+
+
+			const Like02 =   document.createElement('div');
+			Like02.classList.add('like');
+			Like02.setAttribute('id', itemID);
+			
+     	    //Like02.addEventListener('click', () => clickLikesCounterComments(sabaCerticate, parentId, itemID));
+			const likecount02 = document.createElement('span');
+            likecount02.classList.add('number');
+			likecount02.innerHTML = commentObj.likeCount;
+			
+			Like02.appendChild(likecount02);
+			
+			
+			//const Like02 =   document.createElement('div');
+			//Like02.classList.add('like');
+			// Like02.addEventListener('click', () => addLike(itemID, Certicate));
+			//Like02.addEventListener('click', () => disLike(itemID, Certicate));
+			
+			//reactions02.appendChild(Like02);
+
+            const comments02 =   document.createElement('div');
+			comments02.classList.add('comment');
+			// comments02.addEventListener('click', () => getComment());
+			const commentcount02 = document.createElement('span');
+			commentcount02.classList.add('commentnumber');
+			commentcount02.innerHTML = '';
+			//comments02.appendChild(commentcount02);
+			
+			//reactions02.appendChild(comments02);
+
+		 
+	
+			userComment.appendChild(userCommentDiv);
+			
+
+	    $('#conversationId').append(userComment);		 		 
+	 
+	 
+	 
+	 // getLikesCounter022(sabaCerticate, itemID, userComment, userData02, reactions02, Like02, likecount02);
+	 
+	    // clickLikesCounterComments(sabaCerticate, parentId, itemID);
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+	
+	  }
+	  //////////////////////
+
+
+
+	  ///////////////
+
+      const clickLikesCounterComments = (sabaCerticate, parentID, itemID) => {
+	  
+	 
+	  
+	// let html_content = '';
+		const Certicate = sabaCerticate; 	
+	
+
+ 
+	
+  
+  
+		const url = ""+urll+"/v1/social/resource/"+parentID+"/comment?SabaCertificate="+Certicate;
+	
+	//console.log('url', url);
+		  
+		 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityclickDocument  = JSON.parse(this.responseText);
+             const ActivityclickDocumentcommentDetail = ActivityclickDocument.commentDetail;			 
+			 
+			 // get user has like
+		// const userHasLiked = ActivityclickDocument.commentDetail.likeDetail.personDetail.id;			 
+		    const userHasLikedArray = ActivityclickDocument.commentDetail;			 
+			
+			
+			 $.each(userHasLikedArray, function (key, item) {    
+			 
+			 let userHasLiked =  item.likeDetail[0].id;
+			 
+			 //console.log('userHasLiked items', item.likeDetail[0].id);
+			 
+			 
+			 //const likeDetail = ActivityclickDocument;
+			
+			
+			
+			const ActivityImageDocumentCount = ActivityclickDocument.count;
+      
+            //console.log('tootototo 2020', userHasLikedArray);
+			//console.log('userInternalid 2020', userInternalid);
+			
+			
+			 
+			 const found = ActivityclickDocumentcommentDetail.find(element => element.id = userInternalid);
+			 const foundid = found.id;
+			 //console.log('found 2025', found);
+			// console.log('itemID', itemID);  
+			 
+			   
+				if (userHasLiked !== userInternalid ) { 
+ //addLike(itemID, sabaCerticate);
+	//console.log('found id not equal');
+//console.log('itemID', itemID);	
+
+				} else {
+				
+			//	disLike(itemID, sabaCerticate);
+	//console.log('found id equal');
+//console.log('itemID', itemID);	
+				}		 
+					
+			 
+			 });
+			
+			
+			
+
+				 
+			 
+			
+
+
+			 
+
+      
+			 
+
+	
+		
+				 
+		
+		
+
+			
+		  
+
+
+
+
+
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+
+	  
+	  }
+	  
+	  
+
+
+      ////////   
+
+
+
+    const getLikesCounter022 = (sabaCerticate, itemID, userComment, userData02, reactions02, Like02, likecount02) => {
+	
+	
+	
+	
+		  const Certicate = sabaCerticate;   
+  
+	const url = ""+urll+"/v1/social/resource/"+itemID+"/likes?summary=false&SabaCertificate="+Certicate;
+	
+	 let xhr = new XMLHttpRequest();
+		 xhr.open("GET", url);
+		 
+		 xhr.setRequestHeader("Accept", "application/json");
+		 xhr.setRequestHeader("Content-Type", "application/json");
+	
+	
+	xhr.onreadystatechange = function () {
+	
+		 if (xhr.readyState === 4) {
+			 const ActivityLikesCount  = JSON.parse(this.responseText);
+			 //console.log('ActivityLikesCount 8888', ActivityLikesCount);
+			 
+			 	 
+			 
+			 
+			
+			
+		
+		  
+		 }};
+		 
+
+		 
+		 
+		 xhr.send();
+	
+	
+	}
+
+
+    ////////////////////////////
+	  
+		
+		const getMyLearningTabs = () => {
+
+	
+
+function Tabs() {
+
+getCompleted(sabaCerticate, bday);
+
+  var bindAll = function() {
+    var menuElements = document.querySelectorAll('[data-tab]');
+    for(var i = 0; i < menuElements.length ; i++) {
+      menuElements[i].addEventListener('click', change, false);
+    }
+  }
+
+  var clear = function(_callback) {
+  
+    var menuElements = document.querySelectorAll('[data-tab]');
+    for(var i = 0; i < menuElements.length ; i++) {
+      menuElements[i].classList.remove('active');
+      var id = menuElements[i].getAttribute('data-tab');
+      document.getElementById(id).classList.remove('active');
+    }
+  }
+
+  var change = function(e) {
+    clear();	
+	let clickeId = e.target;
+	clickeId.classList.add('active')
+	
+    var id = e.currentTarget.getAttribute('data-tab');
+    document.getElementById(id).classList.add('active');	
+	
+	if(!clickeId.classList.contains('clicked')) {
+	
+	clickeId.classList.add('clicked');
+		switch (id) {
+			case 'Mandatory':
+				getMandatory(sabaCerticate, MandatoryLearning);
+			break;
+		case 'In-Progress':
+				getInProgressLearning(sabaCerticate, bday, InProgressLearning);
+			break;
+		case 'Recommended':
+				getCompetency(sabaCerticate, RecommendedLearning);
+			break;
+        case 'Completed':
+				
+					
+		}
+	 
+	}
+	
+  }
+
+  bindAll();
+}
+
+var connectTabs = new Tabs();
+
+		}
+
+
+        //  getCatalogCategoriesTabs
+
+
+    const  getCatalogCategoriesTabs = () => {
+
+
+function Tabss() {
+getCatalogCategories(sabaCerticate);
+
+  var bindAll = function() {
+    var menuElementss = document.querySelectorAll('[data-tabss]');
+    for(var i = 0; i < menuElementss.length ; i++) {
+      menuElementss[i].addEventListener('click', change, false);
+    }
+  }
+
+  var clear = function(_callback) {
+  
+  
+    var menuElementss = document.querySelectorAll('[data-tabss]');
+    for(var i = 0; i < menuElementss.length ; i++) {
+      menuElementss[i].classList.remove('active');
+      var id = menuElementss[i].getAttribute('data-tabss');
+      document.getElementById(id).classList.remove('active');
+    }
+  }
+
+  var change = function(e) {
+
+    clear();	
+	let clickeId = e.target;
+	clickeId.classList.add('active')
+	
+    var id = e.currentTarget.getAttribute('data-tabss');
+    document.getElementById(id).classList.add('active');	
+	
+	if(!clickeId.classList.contains('clicked')) {
+	
+
+
+	clickeId.classList.add('clicked');
+		switch (id) {
+			case 'AllCategoriseid':
+				
+			break;
+		case 'WebBasedid':
+				getWebBased(sabaCerticate);
+			break;
+		case 'Instructor-led':
+				getInstructorLed(sabaCerticate);
+			break;
+        case 'Completed':
+				getBlended(sabaCerticate); 
+			break;
+        case 'Blended':
+				getVirtualClassroom(sabaCerticate); 
+				break;
+        case 'VirtualClassroom':
+				getVirtualClassroom(sabaCerticate); 		
+		}
+	 
+	}
+	
+  }
+
+  bindAll();
+}
+
+var connectTabss = new Tabss();
+
+		}
+
+	
+
+		
+
+		// functions calls Start
+		
+	     getMainSlider();		
+		 getMyLearningTabs();
+		 drowCalendar(); 
+		 getLinkedInLearning(sabaCerticate);
+		 getBehavioralCompetenciesComponent(sabaCerticate);
+		 getCatalogCategoriesTabs();
+		 getActivityStream(sabaCerticate);
+	
+		
+
+		
+		// functions calls End
+		
+		
+		}
+		
+		gadgets.util.registerOnLoadHandler(init);
+		
+		</script>
+		
+		<script type="text/os-template">
+			<div class="top-alert">
+				<div class="hrader-container">
+				  <div class="header-left">
+					<div class="lhoures">
+					  <div class="textHr">
+						<span class="nowrap">
+						  Learning Hours Completed
+						</span>
+						<span id="LearningHoursId"></span>
+					  </div>
+					</div>
+				  </div>
+				  <div class="text-right btns">
+					<a class="badgesLead" target="_blank" href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/me/reward">
+					  Badges & Leader Board
+					</a>
+					<a class="points" target="_blank" href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/me/reward/mywallet">
+					  Points Store
+					</a>
+				  </div>
+				</div>
+			  </div>
+			  
+			  <!-- Slider Start -->
+			  <div class="banner">
+				<div class="swiper mySwiper">
+				  <div class="swiper-wrapper">
+					<div class="swiper-slide" style="height: auto !important;">          
+					  <div>
+					  <p class="bannerTxt">
+					  The best way to improve your Personal skills, Career path, and more.
+					  </p>
+						<a target="_blank" href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/shared;spf-url=common%2Fsearchresults%2F" class="bannerBtn">Browse Learning</a>
+						</div>
+					  
+					</div>
+					<div class="swiper-slide" style="height: auto !important;">          
+						<p class="bannerTxt">The best way to improve your
+						  Personal skills, Career path, and more.</p>
+						<a href="#" class="bannerBtn">Browse Learning</a>
+					  </div>
+					  <div class="swiper-slide" style="height: auto !important;">          
+						<p class="bannerTxt">The best way to improve your
+						  Personal skills, Career path, and more.</p>
+						<a href="#" class="bannerBtn">Browse Learning</a>
+					  </div>
+				  </div>
+				  <div class="swiper-button-next"></div>
+				  <div class="swiper-button-prev"></div>
+				  <div class="swiper-pagination"></div>
+				</div>
+			  </div>
+			  <!-- Slider End -->
+
+
+			  
+			  
+			  <!-- My Learning Tabs -->
+			  <div class="myLearning">
+				<div class="container topLearn">
+				  <h1 class="title">My Learning </h1>				  
+				<ul>
+				<li  data-tab="Completed" class="b-nav-tab learnTab active">
+						Completed<span id="CompletedLearningBadge" class="badge"></span>
+				    </li>
+					<li  data-tab="In-Progress" class="b-nav-tab learnTab">
+						In-Progress<span id="InPrpgressLearningBadge" class="badge"></span>
+				    </li>
+					<li  data-tab="Mandatory" class="b-nav-tab learnTab ">
+						Mandatory<span id="MandatoryLearningBadge" class="badge"></span>
+					</li>
+					  
+					  <li  data-tab="Recommended" class="b-nav-tab learnTab">
+						competency<span id="RecommendedLearningBadge" class="badge"></span>
+				    </li>
+					
+				</ul> 
+				<div id="Completed" class="b-tab active">
+				  <div id="CompletedLearning" class="row myLearningCard"></div>
+				</div>
+				<div id="In-Progress" class="b-tab ">
+				  <div id="InProgressLearning" class="row myLearningCard"> </div>
+				</div>				
+				<div id="Mandatory" class="b-tab ">
+				   <div id="MandatoryLearning" class="row myLearningCard"></div>				  
+				</div>
+				
+				<div id="Recommended" class="b-tab">
+				  <div id="RecommendedLearning" class="row myLearningCard"></div>
+				</div>  
+				  
+			  <div class="seeMore"><a href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/me/plans" target='_blank'>See more</a></div>
+			  
+				</div>
+			  </div>
+
+             <!-- My Learning Tabs -->
+			
+			  <div class="learnCalendar">
+				<div class="container">
+				  <h1 class="title">Learning Calendar</h1>
+				  <div class="row">
+					<div  class="col-md-6">
+					  <!-- Calendar Start -->
+			
+			<!-- Calendar Start -->
+			
+			<div class="body">
+			  <div id="container">
+				<div id="header">
+				  <div id="monthDisplay"></div>
+				  <div>
+					<button id="backButton"></button>
+					<button id="nextButton"></button>
+				  </div>
+				</div>
+			  
+				<div id="weekdays">
+				  <div>Sun</div>
+				  <div>Mon</div>
+				  <div>Tue</div>
+				  <div>Wed</div>
+				  <div>Thu</div>
+				  <div>Fri</div>
+				  <div>Sat</div>
+				</div>
+			  
+				<div class="claendarLoader">
+				<div class="lodergif" id="lodergif"><img src="https://eu2t1.sabacloud.com/production/EU2TNB0225/sabacr106505147845978735/content.gif
+" alt="loder"></div>
+				<div id="calendar" ></div>
+				
+				</div>
+			  </div>
+			  
+			  <div id="newEventModal">
+				<h2>New Event</h2>
+			  
+				<input id="eventTitleInput" placeholder="Event Title" />
+			  
+				<button id="saveButton">Save</button>
+				<button id="cancelButton">Cancel</button>
+			  </div>
+			  
+			  <div id="deleteEventModal">
+				<h2>Event</h2>
+			  
+				<p id="eventText"></p>
+			  
+				<button id="deleteButton">Delete</button>
+				<button id="closeButton">Close</button>
+			  </div>
+			  
+			  <div id="modalBackDrop"></div>
+			  
+			  </div>
+			  
+			  <!-- sessions --> 
+			  
+			  
+			  <!-- Calendar End -->
+			
+					  <!-- Calendar End -->
+					</div>
+					<div id="clendarContainer" class="col-md-6">
+					  
+					  <div class="eventTitle">
+						<h1>My Learning
+						<span id="startsessionDate"></span>
+						</h1>
+					  </div>
+					  <div id="ClassSessions" class="events">
+						<div class="eventList">
+						  <div class="row">
+							<div class="col-3 pr-0">
+							  <div class="time">8:30 AM</div>
+							  <div class="timeSmall">9:00 AM</div>
+							</div>
+							<div class="col-9">
+							  <div class="eventSub">Start Finishing Projects - Get Back To Achievement Basics
+							  </div>
+							</div>
+						  </div>
+						</div>
+						<div class="eventList">
+						  <div class="row">
+							<div class="col-3 pr-0">
+							  <div class="time">8:30 AM</div>
+							  <div class="timeSmall">9:00 AM</div>
+							</div>
+							<div class="col-9">
+							  <div class="eventSub">The Complete SQL Bootcamp 2020: Go from Zero to Hero
+			
+							  </div>
+							</div>
+						  </div>
+						</div>
+						<div class="eventList">
+						  <div class="row">
+							<div class="col-3 pr-0">
+							  <div class="time">8:30 AM</div>
+							  <div class="timeSmall">9:00 AM</div>
+							</div>
+							<div class="col-9">
+							  <div class="eventSub">The Complete SQL Bootcamp 2020: Go from Zero to Hero
+			
+							  </div>
+							</div>
+						  </div>
+						</div> 
+					</div>
+				  </div>
+				  </div>
+				</div>
+			  </div>
+			
+			  <div class="inLearning">
+				<div class="container">
+				  <h1 class="title">LinkedIn Learning</h1>
+				  <div class="seeMore"><a target="_blank" href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/shared;spf-url=common%2Fcategorydetail%2Fcateg000000000003360">See more</a></div>
+					<div id="LinkedIn" class="row inCard">
+			
+					</div>
+				</div>
+			  </div>
+			
+			  <div class="behCompet">
+				<div class="container">
+				  <h1 class="title">Behavioral Competencies</h1>
+				  <div class="descrip">
+				   <p class="parg">Each member of our team is a specialist in his or her field. Together,  we make sure youre 
+						investing where the best returns are, while building loyalty across every touchpoint.</p>
+					<div class="form-row">
+					<div class="form-group ">
+				<select  id="Competencies">
+				  <option></option>
+				  </select>
+					</div>
+					<div class="form-group">
+						<select id="Levels" >
+							<option></option>
+						</select>					
+					</div>
+				  </div>
+				  </div>
+				  <div class="row" id="BehavioralCompetenciesId">
+				     <div class="comp-msg" style="border:1px #ebebe2 solid; padding-top: 6em; margin-left: 14px; height: 18em; width: 100%; text-align: center;"> To display the competencies  select from drop-down list </div>
+				  </div>
+				</div>
+			  </div>
+			
+
+
+
+			  <!--Catalog Categories Tabs -->
+			    <div class="leCategories">
+				<div class="container">
+				  <h1 class="title">Learn Based on Catalog Categories </h1>	
+				  <div class="descrip">
+					<p class="parg">Grow your learning based on your selection from Catalog Categories</p>
+				   </div>
+				   
+				   <div class="categorisTab">			  
+
+				
+					<div class="row">
+                       <div class="col-md-8">
+
+
+
+				 <ul class="catTab">
+				<li  data-tabss="AllCategoriseid" class="b-nav-tab  active">
+						All Categorise
+				    </li>
+					<li  data-tabss="WebBasedid" class="b-nav-tab ">
+						Web Based
+				    </li>
+					<li  data-tabss="Instructor-led" class="b-nav-tab  ">
+						Instructor-led training
+					</li>
+					  
+					  <li  data-tabss="Blended" class="b-nav-tab ">
+						Blended
+				    </li>
+					
+					 <li  data-tabss="VirtualClassroom" class="b-nav-tab ">
+						Virtual Classroom
+				    </li>
+
+
+				</ul>
+
+
+					</div>
+
+                             <div class="col-md-4">
+                            <div class="seeMore"><a target="_blank" href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/shared;spf-url=common%2Flearningcatalog%2F">View all categories</a></div>
+                           </div>
+
+					</div>   
+
+
+
+                <div id="AllCategoriseid" class="b-tab active">
+				  <div id="AllCategorise" class="row"></div>
+				</div>
+				<div id="WebBasedid" class="b-tab ">
+				  <div id="WebBased" class="row"> </div>
+				</div>				
+				<div id="Instructor-led" class="b-tab ">
+				   <div id="InstructorLed" class="row"></div>				  
+				</div>
+				
+				<div id="Blended" class="b-tab">
+				  <div id="BlendedId" class="row"></div>
+				</div> 
+
+				<div id="VirtualClassroom" class="b-tab">
+				  <div id="VirtualClassroomId" class="row"></div>
+				</div>  
+
+				</div>  
+			
+				</div>
+			  </div>
+
+             <!--Catalog Categories Tabs -->
+
+
+			
+			  <div class="activStream">
+				 <!-- <div id="baqee"></div> -->
+				<div class="container">
+				  <h1 class="title">Activity Stream</h1>
+				  <div class="seeMore"><a href="https://mishkatysb.sabacloud.com/Saba/Web_spf/EU2TNB0225/app/groups/home" target="_blank">All Activities</a></div>
+				 <div class="post">
+					  <div class="row">
+					<!-- <div class="avatar m-auto col-md-1">
+					  <img src="/branding/images/3.jpg" alt="user">
+					</div>
+					<div class="col-md-9 p-0 txtArea">
+					  <textarea id="bio" class="form-control p-0" placeholder="What Happened?" rows="3"></textarea>
+					</div>
+					<div class="col-md-2 m-auto">
+					<button id="submit" type="submit" class="btn btnPost">Post</button>
+				  </div> -->
+				  </div>
+				</div> 
+				  <div id="conversationId" class="conversation" style="height: 787px !important" >
+				</div>
+				
+				<div style="display: none">
+				<div id="addcommentcontainer">
+			   comment: <input type="text" id="myComment" value="">
+			   <button id="addcomment">add commet</button>
+			   </div>
+</div>
+				</div>
+				
+				
+			   
+			  </div>
+			  			   
+			  
+			  <div>
+  
+		</script>
+
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+		]]>
+	</Content>
+</Module>
